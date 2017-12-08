@@ -3,7 +3,7 @@ const express = require('express');
 var app = express();
 
 const dstatus = require('./libs/dstatus');
-const organised_randon = require('./libs/organised_random');
+const organised_random = require('./libs/organised_random');
 
 app.get('/dstatus/:status', function (req, res) {
   dstatus.generate(function (err, image) {
@@ -46,7 +46,7 @@ var WON = {
 };
 
 app.get('/won', function (req, res) {
-  organised_randon.generate(function (err, image) {
+  organised_random.generate(function (err, image) {
     if (err) {
       console.log(err);
       return res.status(602).end();
