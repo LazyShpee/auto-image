@@ -30,7 +30,9 @@ app.get('/awooo', function(req, res) {
     masks: []
   }
 
-  if (req.query.hair) {
+  req.query.hair = req.query.hair ? req.query.hair : 'cc817c';
+
+  if (req.query.hair) { // Yes, useless since I'm defaulting hair anyways, shut up
     var color = TinyColor(req.query.hair);
     if (color.isValid()) {
       var rgb = color.toRgb();
@@ -41,7 +43,10 @@ app.get('/awooo', function(req, res) {
     } else
       return res.status(602).end();
   }
-  if (req.query.face) {
+
+  req.query.face = req.query.face ? req.query.face : 'fff0d3';
+
+  if (req.query.face) { // Ditto, get out
     var color = TinyColor(req.query.face);
     if (color.isValid()) {
       var rgb = color.toRgb(); 
