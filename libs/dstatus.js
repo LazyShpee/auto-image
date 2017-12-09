@@ -52,9 +52,7 @@ exports.generate = function (callback, status, img) {
           this.bitmap.data[ idx + 3 ] = main > radius ? 0 : 100;
         }
       })
-      
       return callback(null, image);
-      
     } catch (e) {
       return callback(e);
     }

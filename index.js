@@ -1,9 +1,12 @@
 const Jimp = require('jimp');
 const express = require('express');
+const TinyColor = require('tinycolor2');
+
 var app = express();
 
 const dstatus = require('./libs/dstatus');
 const organised_random = require('./libs/organised_random');
+const color_mask = require('./libs/color_mask')
 
 app.get('/dstatus/:status', function (req, res) {
   dstatus.generate(function (err, image) {
@@ -19,6 +22,50 @@ app.get('/dstatus/:status', function (req, res) {
       res.send(buffer);
     });
   }, req.params.status, req.query.pfp);
+});
+
+app.get('/awooo', function(req, res) {
+  var opt = {
+    base: "ressources/awooo_bw_clean.png",
+    masks: []
+  }
+
+  if (req.query.hair) {
+    var color = TinyColor(req.query.hair);
+    if (color.isValid()) {
+      var rgb = color.toRgb();
+      opt.masks.push({
+        image: "ressources/awooo_bw_clean_mask_hair.png",
+        color: [rgb.r, rgb.g, rgb.b]
+      });
+    } else
+      return res.status(602).end();
+  }
+  if (req.query.face) {
+    var color = TinyColor(req.query.face);
+    if (color.isValid()) {
+      var rgb = color.toRgb(); 
+      opt.masks.push({
+        image: "ressources/awooo_bw_clean_mask_face.png",
+        color: [rgb.r, rgb.g, rgb.b]
+      });
+    } else
+      return res.status(602).end();
+  }
+
+  color_mask.generate(function (err, image) {
+    if (err) {
+      console.log(err);
+      return res.status(602).end();
+    }
+    
+    image.getBuffer(Jimp.MIME_PNG, function(err, buffer){
+      if (err)
+        return res.status(602).end();
+      res.set("Content-Type", Jimp.MIME_PNG);
+      res.send(buffer);
+    });
+  }, opt);
 });
 
 var OR = {
