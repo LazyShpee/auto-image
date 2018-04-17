@@ -1,0 +1,23 @@
+{
+  "name": "auto-image",
+  "version": "2.0.0",
+  "description": "A shitty automatic image generation api",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LazyShpee/auto-image.git"
+  },
+  "author": "LazyShpee",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/LazyShpee/auto-image/issues"
+  },
+  "homepage": "https://github.com/LazyShpee/auto-image#readme",
+  "dependencies": {
+    "express": "^4.16.3",
+    "jimp": "^0.2.28"
+  }
+}
