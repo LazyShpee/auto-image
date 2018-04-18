@@ -80,11 +80,16 @@ async function _search_canvas(_text) {
 
     let canvas = createCanvas(baseImg.width, baseImg.height), // Create a canvas with base image dimensions
         ctx = canvas.getContext('2d');
-    ctx.drawImage(baseImg, 0, 0, baseImg.width, baseImg.height); // Draw the full image on the canvas
+
+    ctx.fillStyle = '#fff'; // Paint it ~~black~~ white
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    ctx.fillStyle = '#000';
     ctx.font = '18px Dilbert'; // Use our registered font
-
     centerText(ctx, _text, 58, 346, 170, 18*4, 5, 18);
-
+    
+    ctx.drawImage(baseImg, 0, 0, baseImg.width, baseImg.height); // Draw the full image on the canvas
+    
     return canvas;
 }
 
