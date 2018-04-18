@@ -17,7 +17,9 @@
   },
   "homepage": "https://github.com/LazyShpee/auto-image#readme",
   "dependencies": {
+    "canvas": "^2.0.0-alpha.12",
     "express": "^4.16.3",
-    "jimp": "^0.2.28"
+    "jimp": "^0.2.28",
+    "node-canvas-text": "^1.0.2"
   }
 }
