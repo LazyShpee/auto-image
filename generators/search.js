@@ -1,6 +1,6 @@
 const helper = require('../helper');
 const fs = require('fs');
-const { createCanvas, loadImage, Image, registerFont } = require('canvas');
+const { createCanvas, Image, registerFont } = require('canvas');
 
 registerFont('./ressources/fonts/DILBERTFONT2.ttf', {family: 'Dilbert'});
 
@@ -33,5 +33,5 @@ async function _search_canvas(_text, _image, _mode) {
 
 module.exports.generate = async function (_text, _image, _mode) {
     let image = await _search_canvas(_text || 'I forgot to input some text or image', _image, _mode);
-    return image.toBuffer();// helper.getBuffer(image, Jimp.MIME_PNG);
+    return image.toBuffer();
 };
