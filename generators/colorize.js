@@ -57,7 +57,7 @@ function hslToRgb(h, s, l) {
  * @description Colorises layers
  * @param {Array} stack {path: 'PATH', color: {r: 255, g: 255, b: 255}}, color is optional
  */
-async function _colorize(stack) {
+async function _blend(stack) {
     let canvas, ctx, image = new Image;
     stack.forEach(element => {
         image.src = fs.readFileSync(element.path);
@@ -66,14 +66,32 @@ async function _colorize(stack) {
         tmpCtx.drawImage(image, 0, 0);
         
         if (element.color) { // If a color exists, colorize, if not just skip to use as normal layer
+            let mode = element.mode || 'colorize'
             let imageData = tmpCtx.getImageData(0, 0, image.width, image.height);
+            
             let colorHSL = rgbToHsl(element.color.r, element.color.g, element.color.b);
+            let colorRGB = [element.color.r / 255, element.color.g / 255, element.color.b / 255];
+
             for (let i = 0; i < imageData.data.length; i += 4) {
-                let hsl = rgbToHsl(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
-                let rgb = hslToRgb(colorHSL[0], colorHSL[1], hsl[2]); // C(H) C(L) C(S) = A(H) A(L) B(S)
-                imageData.data[i + 0] = rgb[0];
-                imageData.data[i + 1] = rgb[1];
-                imageData.data[i + 2] = rgb[2];
+                switch(mode) {
+                    default:
+                    case 'colorize':
+                        let hsl = rgbToHsl(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
+                        if (element.darken)
+                            hsl[2] = hsl[2]*2;
+                        let rgb = hslToRgb(colorHSL[0], colorHSL[1], hsl[2]); // C(H) C(L) C(S) = A(H) A(L) B(S)
+                        imageData.data[i + 0] = rgb[0];
+                        imageData.data[i + 1] = rgb[1];
+                        imageData.data[i + 2] = rgb[2];
+                        break;
+                    case 'hard_light':
+                        for (let n = 0; n < 3; n++) {
+                            let a = colorRGB[n];
+                            let b = imageData.data[i + n] / 255;
+                            imageData.data[i + n] = (a >= 0.5 ? 2 * a * b: 1 - 2 * (1 - a) - 2 * (1 - a)) * 255;
+                        }
+                        break;
+                }
             }
             tmpCtx.putImageData(imageData, 0, 0);
         }
@@ -90,6 +108,6 @@ async function _colorize(stack) {
 }
 
 module.exports.generate = async function (stack) {
-    let image = await _colorize(stack);
+    let image = await _blend(stack);
     return image.toBuffer();
 };
