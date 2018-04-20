@@ -77,9 +77,21 @@ async function _blend(stack) {
                     default:
                     case 'colorize':
                         let hsl = rgbToHsl(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
-                        if (element.darken)
-                            hsl[2] = hsl[2]*2;
                         let rgb = hslToRgb(colorHSL[0], colorHSL[1], hsl[2]); // C(H) C(L) C(S) = A(H) A(L) B(S)
+                        imageData.data[i + 0] = rgb[0];
+                        imageData.data[i + 1] = rgb[1];
+                        imageData.data[i + 2] = rgb[2];
+                        break;
+                    case 'hue':
+                        let hsl = rgbToHsl(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
+                        let rgb = hslToRgb(colorHSL[0], hsl[1], hsl[2]); // C(H) C(L) C(S) = A(H) B(L) B(S)
+                        imageData.data[i + 0] = rgb[0];
+                        imageData.data[i + 1] = rgb[1];
+                        imageData.data[i + 2] = rgb[2];
+                        break;
+                    case 'luminance':
+                        let hsl = rgbToHsl(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
+                        let rgb = hslToRgb(hsl[0], hsl[1], colorHSL[2]); // C(H) C(L) C(S) = B(H) B(L) A(S)
                         imageData.data[i + 0] = rgb[0];
                         imageData.data[i + 1] = rgb[1];
                         imageData.data[i + 2] = rgb[2];
