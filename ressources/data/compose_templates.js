@@ -8,7 +8,8 @@ const template = {
     boxImage: {x:0, y:0, w:0, h:0}, // OPTIONAL
     rotate: {x:0, y:0, angle: 0}, // OPTIONAL
     font: {family: 'FACENAME', size: 0, vs: 0, hs: 0, color: '#000'},
-    color: '#fff'  // OPTIONAL
+    color: '#fff',  // OPTIONAL
+    mask: 'PATH'
 }
 */
 
@@ -37,5 +38,14 @@ module.exports = {
         boxText: {x: 46, y: 308, w: 468, h: 318},
         font: {family: 'Anisa', size: 56, hs: 10},
         color: '#fff'
+    },
+    'pink': {
+        base: './ressources/images/pink.png',
+        rotate: {x: 488.00, y: 133.00, angle: -10.27},
+        boxImage: {x: 485, y: 129, w: 663, h: 431},
+        boxText: {x: 497, y: 193, w: 635, h: 304},
+        font: {family: 'Anisa', size: 100, hs: 10},
+        color: '#fff',
+        mask: './ressources/images/pink_mask.png'
     }
 }

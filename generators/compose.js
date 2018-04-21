@@ -21,8 +21,8 @@ async function _compose(template, options) {
         ctx = canvas.getContext('2d');
 
     if (template.color) {
-        ctx.fillStyle = template.color; // Paint it ~~black~~ color
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = template.color; // Paint it ~~black~~ color
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
     if (template.rotate) {
@@ -46,8 +46,15 @@ async function _compose(template, options) {
         helper.drawImage(ctx, image, helper.def(template.boxImage, template.box), {mode: options.mode});
     }
     
-    if (template.rotate) {
+    if (template.rotate)
         ctx.restore();
+
+    if (template.mask) {
+        ctx.globalCompositeOperation = 'destination-in';
+        let mask = new Image;
+            mask.src = fs.readFileSync(template.mask);
+        ctx.drawImage(mask, 0, 0);
+        ctx.globalCompositeOperation = 'source-over';
     }
 
     ctx.drawImage(baseImage, 0, 0, baseImage.width, baseImage.height); // Draw the full image on the canvas
