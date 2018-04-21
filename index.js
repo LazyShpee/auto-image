@@ -4,6 +4,7 @@ const tinycolor = require('tinycolor2');
 
 let search = require('./generators/search');
 let colorize = require('./generators/colorize');
+let nichijou = require('./generators/nichijou');
 
 app.get('/search', async (req, res) => {
     let file = await search.generate(req.query.text, req.query.image, req.query.mode);
@@ -20,6 +21,13 @@ app.get('/awooo', async (req, res) => {
     ]);
 
     res.set('Content-Type', 'image/png');
+    return res.status(200).send(file);
+});
+
+app.get('/nichijou', async (req, res) => {
+    let file = await nichijou.generate(req.query.text);
+
+    res.set('Content-Type', 'image/gif');
     return res.status(200).send(file);
 });
 

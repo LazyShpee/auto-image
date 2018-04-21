@@ -105,7 +105,9 @@ function drawText(ctx, text, box, hs, vs, options) {
     lines.forEach((line, lindex) => {
         let xoffset = 0; // Cumulative X offset for drawing words and spacing them
         line.words.forEach((word, windex) => {
-            ctx.fillText(word, box.x + (box.w - line.width) / 2 + xoffset, box.y + (box.h - lines.length * vs) / 2 + lindex * vs);
+            ctx.fillText(word, box.x + (box.w - line.width) / 2 + xoffset + def(options.offsetX, 0), box.y + (box.h - lines.length * vs) / 2 + lindex * vs + def(options.offsetY, 0));
+            if (options.stroke)
+                ctx.strokeText(word, box.x + (box.w - line.width) / 2 + xoffset + def(options.offsetX, 0), box.y + (box.h - lines.length * vs) / 2 + lindex * vs + def(options.offsetY, 0));
             xoffset += line.sizes[windex].width + hs; // Add the current word's width and horizontal spacing
         });
     });
