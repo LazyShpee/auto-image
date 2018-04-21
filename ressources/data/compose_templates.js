@@ -39,6 +39,14 @@ module.exports = {
         font: {family: 'Anisa', size: 56, hs: 10},
         color: '#fff'
     },
+    'shy': {
+        base: './ressources/images/shy.png',
+        rotate: {x: 369.00, y: 441.00, angle: 3.16},
+        boxImage: {x: 358, y: 432, w: 458, h: 427},
+        boxText: {x: 376, y: 454, w: 420, h: 391},
+        font: {family: 'Anisa', size: 56, hs: 10},
+        color: '#fff'
+    },
     'pink': {
         base: './ressources/images/pink.png',
         rotate: {x: 488.00, y: 133.00, angle: -10.27},
