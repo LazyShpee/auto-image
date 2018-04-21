@@ -131,7 +131,7 @@ function drawImage(ctx, image, box, options) {
         rb = box.w / box.h;
 
     switch(mode) {
-        case 'fit':
+        case 'fill':
             if (rb < ri) {
                 h *= box.w / w;
                 w = box.w;
@@ -140,7 +140,7 @@ function drawImage(ctx, image, box, options) {
                 h = box.h;
             }
             break;
-        case 'fill':
+        case 'fit':
             if (rb > ri) {
                 h *= box.w / w;
                 w = box.w;

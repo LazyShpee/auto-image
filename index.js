@@ -5,9 +5,13 @@ const tinycolor = require('tinycolor2');
 let search = require('./generators/search');
 let colorize = require('./generators/colorize');
 let nichijou = require('./generators/nichijou');
+let compose = require('./generators/compose');
 
-app.get('/search', async (req, res) => {
-    let file = await search.generate(req.query.text, req.query.image, req.query.mode);
+const templates = require('./ressources/data/compose_templates');
+app.get('/:type', async (req, res, next) => {
+    if (!templates[req.params.type]) return next(); // If template type not found, let other router do the thing
+
+    let file = await compose.generate(templates[req.params.type], req.query.text, req.query.image, req.query.mode);
 
     res.set('Content-Type', 'image/png');
     return res.status(200).send(file);

@@ -24,13 +24,13 @@ async function _simpleGifText(frameData) {
 
     let currentText;
     for (let n = 0; n < frameData.metadata.count; n++) {
-        image.src = fs.readFileSync(frameData.metadata.filename.format(n));
+        image.src = fs.readFileSync(frameData.metadata.filename.format(n)); // Could be optimized by precaching images on start
         
         ctx.drawImage(image, 0, 0);
 
         if (frameData[n]) currentText = frameData[n];
         if (currentText && currentText.text) {
-            // Draw text
+            // Draw text, could be optimized by using a cache canvas
             helper.drawText(ctx, currentText.text, currentText.box, 10, frameData.metadata.size, {offsetY: frameData.metadata.size, stroke: true});
         }
 
