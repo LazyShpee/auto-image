@@ -73,9 +73,10 @@ function findAll(sourceString, re, aggregator = []) {
  * @param {Array} box 
  * @param {number} hs Horizontal separation (pixels between words)
  * @param {number} vs Vertical separation (pixels between starts of a line)
- * @param {Array} options Unused yet
+ * @param {Array} options {stroke: false}
  */
 function drawText(ctx, text, box, hs, vs, options) {
+    options = options || {};
     let words = findAll(text, /\S+/).map(e => e[0]); // Split the words
     let sizes = words.map(e => ctx.measureText(e)); // Get the words sizes
     let lines = [];
@@ -122,6 +123,7 @@ const _modes = ['fit', 'fill'];
  * @param {Array} options mode: 'fit' or 'fill'
  */
 function drawImage(ctx, image, box, options) {
+    options = options || {};
     let mode = _modes.includes(options.mode) ? options.mode : 'fit';
     let w = image.width,
         h = image.height,
