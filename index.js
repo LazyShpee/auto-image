@@ -21,7 +21,7 @@ app.get('/awooo', async (req, res) => {
     let color = tinycolor(req.query.color || 'red');
    let file = await colorize.generate([
         {path: './ressources/images/awooo_regular.png'},
-        {path: './ressources/images/awooo_regular_hair.png', color: color.toRgb(), mode: req.query.mode}
+        {path: './ressources/images/awooo_regular_hair.png', color: color, mode: req.query.mode}
     ]);
 
     res.set('Content-Type', 'image/png');

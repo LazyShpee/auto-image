@@ -53,9 +53,10 @@ function hslToRgb(h, s, l) {
     return [ r * 255, g * 255, b * 255 ];
 }
 
+const allowModes = ['hsl-color', 'darken', 'lighten', 'hard-light', 'soft-light', 'hsl-hue', 'hsl-saturation', 'hsl-luminosity'];
 /**
  * @description Colorises layers
- * @param {Array} stack {path: 'PATH', color: {r: 255, g: 255, b: 255}}, color is optional
+ * @param {Array} stack {path: 'PATH', color: tinycolor object}, color is optional
  */
 async function _blend(stack) {
     let canvas, ctx, image = new Image;
@@ -65,48 +66,22 @@ async function _blend(stack) {
         let tmpCtx = tmpCanvas.getContext('2d');
         tmpCtx.drawImage(image, 0, 0);
         
-        if (element.color) { // If a color exists, colorize, if not just skip to use as normal layer
-            let mode = element.mode || 'colorize'
-            let imageData = tmpCtx.getImageData(0, 0, image.width, image.height);
-            
-            let colorHSL = rgbToHsl(element.color.r, element.color.g, element.color.b);
-            let colorRGB = [element.color.r / 255, element.color.g / 255, element.color.b / 255];
+        if (element.color) { // If a color exists, compose, if not just skip to use as normal layer
+            let mode = element.mode || 'hsl-color'
+            if (allowModes.includes(mode)) {
+                let canvas = createCanvas(image.width, image.height);
+                let ctx = canvas.getContext('2d');
 
-            let hsl, rgb;
-            for (let i = 0; i < imageData.data.length; i += 4) {
-                switch(mode) {
-                    default:
-                    case 'colorize':
-                        hsl = rgbToHsl(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
-                        rgb = hslToRgb(colorHSL[0], colorHSL[1], hsl[2]); // C(H) C(L) C(S) = A(H) A(L) B(S)
-                        imageData.data[i + 0] = rgb[0];
-                        imageData.data[i + 1] = rgb[1];
-                        imageData.data[i + 2] = rgb[2];
-                        break;
-                    case 'hue':
-                        hsl = rgbToHsl(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
-                        rgb = hslToRgb(colorHSL[0], hsl[1], hsl[2]); // C(H) C(L) C(S) = A(H) B(L) B(S)
-                        imageData.data[i + 0] = rgb[0];
-                        imageData.data[i + 1] = rgb[1];
-                        imageData.data[i + 2] = rgb[2];
-                        break;
-                    case 'luminance':
-                        hsl = rgbToHsl(imageData.data[i + 0], imageData.data[i + 1], imageData.data[i + 2]);
-                        rgb = hslToRgb(hsl[0], hsl[1], colorHSL[2]); // C(H) C(L) C(S) = B(H) B(L) A(S)
-                        imageData.data[i + 0] = rgb[0];
-                        imageData.data[i + 1] = rgb[1];
-                        imageData.data[i + 2] = rgb[2];
-                        break;
-                    case 'hard_light':
-                        for (let n = 0; n < 3; n++) {
-                            let a = colorRGB[n];
-                            let b = imageData.data[i + n] / 255;
-                            imageData.data[i + n] = (a >= 0.5 ? 2 * a * b: 1 - 2 * (1 - a) - 2 * (1 - a)) * 255;
-                        }
-                        break;
-                }
-            }
-            tmpCtx.putImageData(imageData, 0, 0);
+                ctx.fillStyle = element.color.toRgbString(); // THIS
+                ctx.fillRect(0, 0, tmpCanvas.width, tmpCanvas.height); // IS
+                ctx.globalCompositeOperation = 'destination-in'; // A
+                ctx.drawImage(image, 0, 0); // HACK
+
+                tmpCtx.save();
+                tmpCtx.globalCompositeOperation = mode;
+                tmpCtx.drawImage(canvas, 0, 0);
+                tmpCtx.restore();
+            } // else maybe throw an unknown mode error ?
         }
         
         if (canvas === undefined) { // If canvas isn't defined, use the current one
