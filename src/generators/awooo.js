@@ -27,8 +27,7 @@ async function awooo(query, res) {
 			mode,
 		});
 	} catch (e) {
-		res.set('Content-Type', 'text/plain').status(400).end(e.message);
-		return
+		return res.set('Content-Type', 'text/plain').status(400).end(e.message);
 	}
 
 	res.set('Content-Type', 'image/png');
