@@ -29,7 +29,7 @@ async function canvasify(input) {
 			try {
 				head = await axios.head(url.href);
 			} catch (e) {
-				throw new Error('Failed to fetch head from URL');
+				throw new Error(`Failed to fetch head from URL ${url.href}`);
 			}
 
 			if (!['image/jpeg', 'image/png', 'image/gif'].includes(head.headers['content-type'])) throw new Error(`Invalid content type`);
@@ -37,13 +37,13 @@ async function canvasify(input) {
 			try {
 				data = (await axios.get(url.href, { responseType: 'arraybuffer' })).data;
 			} catch (e) {
-				throw new Error('Failed to load image from URL');
+				throw new Error(`Failed to load image from URL ${url.href}`);
 			}
 		} else {
 			try {
 				data = await asyncReadFile(input);
 			} catch (e) {
-				throw new Error(`Failed to load file`);
+				throw new Error(`Failed to load file ${input}`);
 			}
 		}
 
