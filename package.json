@@ -2,8 +2,9 @@
   "name": "auto-image",
   "version": "2.0.0",
   "description": "A shitty automatic image generation api",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
+    "start": "node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -12,9 +13,6 @@
   },
   "author": "LazyShpee",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/LazyShpee/auto-image/issues"
-  },
   "homepage": "https://github.com/LazyShpee/auto-image#readme",
   "dependencies": {
     "axios": "^0.18.0",
@@ -25,5 +23,9 @@
     "node-canvas-text": "^1.0.2",
     "string-format-js": "^1.0.0",
     "tinycolor2": "^1.4.1"
+  },
+  "devDependencies": {
+    "eslint": "^4.19.1",
+    "eslint-config-xo": "^0.20.1"
   }
 }
